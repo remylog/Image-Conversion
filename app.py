@@ -5,7 +5,7 @@ import os
 app = Flask(__name__, static_url_path='/static', static_folder='static')
 
 # アップロードされたファイルの保存先
-UPLOAD_FOLDER = '/Users/remylog/Desktop/pngapps/file/'
+UPLOAD_FOLDER = 'file/'
 
 @app.route('/', methods=['GET', 'POST'])
 def convert_image():
