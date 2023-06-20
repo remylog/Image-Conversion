@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>画像変換アプリケーション</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+  <h1>画像変換アプリケーション</h1>
+
+  <h2>ダウンロード一覧</h2>
+
+  {% if save_paths %}
+    <ul>
+      {% for save_path in save_paths %}
+        {% set filename = save_path.rsplit('/', 1)[1] %}
+        <li>
+          <p>ファイル: {{ filename }}</p>
+          <a href="/download?filename={{ filename }}">ダウンロード</a>
+          <button onclick="deleteFile('{{ filename }}')" data-filename="{{ filename }}">削除</button>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>ダウンロード可能なファイルはありません。</p>
+  {% endif %}
+
+  <script src="/static/js/script.js"></script>
+  <script>
+    function deleteFile(filename) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/delete', true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+          alert(xhr.responseText);
+          location.reload();  // ページをリロードして最新の状態を表示する
+        }
+      };
+      xhr.send('filename=' + encodeURIComponent(filename));
+    }
+  </script>
+</body>
+
+</html>
